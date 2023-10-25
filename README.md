@@ -1,68 +1,90 @@
 # Laporan Proyek Machine Learning
-### Nama :
-### Nim :
-### Kelas :
+### Nama : Ikmal Saepul Rohman 
+### Nim : 211351063
+### Kelas : Malam B
 
 ## Domain Proyek
 
-Pada bagian ini, kamu perlu menuliskan latar belakang yang relevan dengan proyek yang diangkat.
-
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Jelaskan mengapa dan bagaimana masalah tersebut harus diselesaikan
-- Menyertakan hasil riset terkait atau referensi. Referensi yang diberikan harus berasal dari sumber yang kredibel dan author yang jelas.
-  
-  Format Referensi: [Judul Referensi](https://scholar.google.com/) 
+Pada proyek ini, saya membuat aplikasi untuk menentukan jenis kanker payudara berdasarkan rata rata ukuran sehingga kita bisa menentukan kanker tersebut termasuk dalam golongan ganas atau kanker jinak tanpa harus melakukan test ke rumah sakit
 
 ## Business Understanding
 
-Pada bagian ini, kamu perlu menjelaskan proses klarifikasi masalah.
+Pada dasarnya sel kanker itu terbagi dalam 2 jenis, yakni kanker ganas dan kanker jinak. Hal ini bisa di ketahui berdasarkan rata rata ukuran dan kecenderungan dari sifat kanker tersebut. Maka, adanya aplikasi ini bertujuan untuk menentukan jenis kanker berdasarkan 570 studi kasus dan 30 parimeter dengan algoritma klasifikasi
 
 Bagian laporan ini mencakup:
 
 ### Problem Statements
 
 Menjelaskan pernyataan masalah latar belakang:
-- Pernyataan Masalah 1
-- Pernyataan Masalah 2
-- Pernyataan Masalah n
+- Biaya pengecekan sel kanker yang terbilang mahal
 
 ### Goals
 
 Menjelaskan tujuan dari pernyataan masalah:
-- Jawaban pernyataan masalah 1
-- Jawaban pernyataan masalah 2
-- Jawaban pernyataan masalah n
+- Memudahkan pengguna untuk mengetahui stage kanker payudaranya
+- Memungkinkan pengguna untuk melakukan pengecekan mandiri tanpa harus pergi ke rumah sakit
 
-Semua poin di atas harus diuraikan dengan jelas. Anda bebas menuliskan berapa pernyataan masalah dan juga goals yang diinginkan.
-
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Menambahkan bagian “Solution Statement” yang menguraikan cara untuk meraih goals. Bagian ini dibuat dengan ketentuan sebagai berikut: 
 
     ### Solution statements
-    - Mengajukan 2 atau lebih solution statement. Misalnya, menggunakan dua atau lebih algoritma untuk mencapai solusi yang diinginkan atau melakukan improvement pada baseline model dengan hyperparameter tuning.
-    - Solusi yang diberikan harus dapat terukur dengan metrik evaluasi.
+    - Sebagai metode untuk mengetahui klasifikasi kanker melalui algoritma SVC
+    - Berdasarkan perhitungan algoritma, tingkat akurasi pada aplikasi machine learning adalah 95.7% sehingga keakurasianya bisa di pertanggung jawabkan
 
 ## Data Understanding
-Paragraf awal bagian ini menjelaskan informasi mengenai data yang Anda gunakan dalam proyek. dataset wajib menggunakan [kaggle](https://www.kaggle.com/) dan **atribut yang digunakan minimal 8 atribut**. Sertakan juga sumber atau tautan untuk mengunduh dataset.<br> 
+Data yang digunakan di dasarkan pada dataset yang di sediakan oleh kaggle dimana di dalamnya terdapat 570 studi kasus dengan 30 parimeter dan 2 klasifikasi
 
-Contoh: [Heart Failure Prediction Dataset](https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction).
+[Cancer Data](https://www.kaggle.com/datasets/erdemtaha/cancer-data).
 
-Selanjutnya uraikanlah seluruh variabel atau fitur pada data. Sebagai contoh:  
 
 ### Variabel-variabel pada Heart Failure Prediction Dataset adalah sebagai berikut:
-- Age : merupakan umur pasien dalam satuan tahun.
-- Sex : merupakan jenis kelamin pasien meliputi [M: Male, F: Female].
-- dst
+dari 30 parimeter yang di sediakan, saya hanya mengambil 8 parimeter saja. Dengan 8 parimeter pun tingkat keakurasian nya sudah mencapai 95.7%. Jika di tambakan kembali maka akurasinya juga akan meningkat. Namun parimeter yang saya bawa sudah cukup menunjang karena berdasarkan nilai rata rata nya.
+Variable dan tipedata yang di gunakan meliputi :
 
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Melakukan beberapa tahapan yang diperlukan untuk memahami data, contohnya teknik visualisasi data atau exploratory data analysis.
+- radius_mean = float ('Rata Rata Radius Cell Kanker dalam Milimeter (Mm')
+- perimeter_mean = float ('Rata Rata Parimeter Cell Kanker (Mm)')
+- area_mean = float ('Rata Rata Luas Area Terdampak Cell Kanker (Mm)')
+- smoothness_mean = float ('Rata Rata Kerataan Pada Cell Kanker (Mm)')
+- compactness_mean = float ('Tingkat kepadatan pada cell Kanker (Mm)')
+- concavity_mean = float ('Rata Rata Nilai Kecengungan pada Cell Kanker (Mm)')
+- fractal_dimension_mean = float ('Rata Rata Nilai Fractal pada Cell Kanker (Mm)')
+- texture_mean = float ('Rata Rata Luas Tekstur area terdampak Cell Kanker (Mm)')
+
 
 ## Data Preparation
-Pada bagian ini Anda menerapkan dan menyebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan harus berurutan.
+Pertama tama kita persiapkan dataset yang akan di pergunakan untuk menjadi model Machine Learning, selanjutnya kita lakukan data preparation dengan memanggil library yang dibutuhkan
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan proses data preparation yang dilakukan
-- Menjelaskan alasan mengapa diperlukan tahapan data preparation tersebut.
+```bash
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn import svm
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+```
+Selanjutnya kita koneksikan google collab kita dengan kaggle menggunakan token kaggle dengan perintah
+```bash
+from google.colab import files
+files.upload()
+```
+maka kita akan mengupload file token kaggle kita. dan bisa kita lanjutkan dengan membuat direktori untuk menyimpan file token tersebut
+```bash
+!mkdir -p ~/.kaggle
+!cp kaggle.json ~/.kaggle/
+!chmod 600 ~/.kaggle/kaggle.json
+!ls ~/.kaggle
+```
+selanjutkan kita download data setnya
+```bash
+!kaggle datasets download -d erdemtaha/cancer-data
+```
+Jika sudah, kita bisa membuat folder baru untuk menyimpan dan mengekstrak dataset yang sudah kita download
+```bash
+!mkdir cancer-data
+!unzip cancer-data.zip -d cancer-data
+!ls cancer-data
+```
+
 
 ## Modeling
 Tahapan ini membahas mengenai model machine learning yang digunakan untuk menyelesaikan permasalahan. Anda perlu menjelaskan tahapan dan parameter yang digunakan pada proses pemodelan.
