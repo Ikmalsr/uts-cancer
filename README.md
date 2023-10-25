@@ -84,7 +84,68 @@ Jika sudah, kita bisa membuat folder baru untuk menyimpan dan mengekstrak datase
 !unzip cancer-data.zip -d cancer-data
 !ls cancer-data
 ```
+Kemudian kita mount data nya dengan perintah
+```bash
+df = pd.read_csv('cancer-data/Cancer_Data.csv')
+```
+Jika data sudah di mount, maka kita bisa mencoba memastikan apakah data akan terpanggil atau tidak dengan perintah
+```bash
+df.head()
+```
+jika sudah benar maka data 5 teratas akan muncul
+Dan jika dilihat ada colom dengan data yang tidak terdefinisi maka kita bisa buang kolom tersebut
+```bash
+df.drop('Unnamed: 32', axis=1, inplace=True)
+```
+Maka kolom unnamed: 32 akan terbuang
 
+selanjutnya kita lakukan perhitungan value pada kolom diagnosis dengan perintah
+
+```bash
+df['diagnosis'].value_counts()
+```
+Maka akan muncul
+```bash
+B    357
+M    212
+Name: diagnosis, dtype: int64
+```
+Dimana pada kolom diagnosis terdapat 569 data untuk data B ada 357 entri dan data M 212 entri dengan type data integer
+Data B merupakan data Benign atau kanker jinak dan data M merupakan Malignant atau Ganas
+
+Selanjutnya karena model ini hanya bisa menerima inputan berupa angka, maka kita harus rubah dulu variable M dan B dengan perintah
+```bash
+df['diagnosis'] = df['diagnosis'].map({'M': 1, 'B': 0})
+```
+Maka jika kita cek value nya akan muncul
+```bash
+0    357
+1    212
+Name: diagnosis, dtype: int64
+```
+dimana data B dan M sudah dirubah menjadi 0 dan 1
+
+Selanjutnya kita bisa lakukan visualisai data dengan perintah
+```bash
+sns.countplot(x='diagnosis', data=df)
+plt.title('Diagnosis Distribution')
+plt.show()
+```
+Maka akan muncul
+
+![alt text](https://github.com/Ikmalsr/uts-cancer/blob/main/diagnosis1.png)
+Bisa dilihat berdasarkan visualisai di atas dari studi kasus yang dijalan bisa disimpulkan kebanyakan kanker yang bersifat jinak dibanding yang ganas
+
+selanjutnya kita juga bisa melakukan data visualisasi berupa heatmap dengan perintah
+
+```bash
+plt.figure(figsize = (18,9))
+sns.heatmap(df.corr(), cmap='GnBu', annot=True)
+plt.show()
+```
+Maka akan muncul
+![alt text](https://github.com/Ikmalsr/uts-cancer/blob/main/heatmap.png)
+seperti yang dilihat, heatmap berdasarkan data daignosis bernilai 1 dengan parameter yang sudah di koreksi
 
 ## Modeling
 Tahapan ini membahas mengenai model machine learning yang digunakan untuk menyelesaikan permasalahan. Anda perlu menjelaskan tahapan dan parameter yang digunakan pada proses pemodelan.
