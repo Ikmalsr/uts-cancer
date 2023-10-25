@@ -1,7 +1,7 @@
 import pickle
 import streamlit as st
 
-diagnosa = pickle.load(open('jenis_cancer.sav', 'rb'))
+diagnosa = pickle.load(open('tumor_class.sav', 'rb'))
 
 st.title('Klasifikasi Jenis Tumor Pada Payudara')
 
