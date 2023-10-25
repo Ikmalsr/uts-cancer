@@ -3,7 +3,7 @@ import streamlit as st
 
 diagnosa = pickle.load(open('tumor_class.sav', 'rb'))
 
-st.title('Klasifikasi Jenis Tumor Pada Payudara')
+st.title('Klasifikasi Jenis Kanker Pada Payudara')
 
 radius_mean = st.text_input('Rata Rata Radius Cell Kanker (Mm) : ')
 perimeter_mean = st.text_input('Rata Rata Parimeter Cell Kanker (Mm) : ')
