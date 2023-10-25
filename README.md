@@ -35,7 +35,7 @@ Data yang digunakan di dasarkan pada dataset yang di sediakan oleh kaggle dimana
 [Cancer Data](https://www.kaggle.com/datasets/erdemtaha/cancer-data).
 
 
-### Variabel-variabel pada Heart Failure Prediction Dataset adalah sebagai berikut:
+### Variabel-variabel pada Breast Cancer Dataset adalah sebagai berikut:
 dari 30 parimeter yang di sediakan, saya hanya mengambil 8 parimeter saja. Dengan 8 parimeter pun tingkat keakurasian nya sudah mencapai 95.7%. Jika di tambakan kembali maka akurasinya juga akan meningkat. Namun parimeter yang saya bawa sudah cukup menunjang karena berdasarkan nilai rata rata nya.
 Variable dan tipedata yang di gunakan meliputi :
 
@@ -165,30 +165,109 @@ Kemudian kita bisa standarkan nilai X
 ```bash
 scaler.fit(X)
 ```
+kemudian kita buat variabel baru untuk data yang sudah di standarkan
+```bash
+sd_data = scaler.transform(X)
+```
+Kemudian kita definisikan ulang dengan nilai yang sudah di standarkan
+```bash
+X = sd_data
+Y = df['diagnosis']
+```
+Disini terlihat bahwa X menjadi nilai yang sudah di standarkan dan Y nya masih tidak berubah
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan kelebihan dan kekurangan dari setiap algoritma yang digunakan.
-- Jika menggunakan satu algoritma pada solution statement, lakukan proses improvement terhadap model dengan hyperparameter tuning. **Jelaskan proses improvement yang dilakukan**.
-- Jika menggunakan dua atau lebih algoritma pada solution statement, maka pilih model terbaik sebagai solusi. **Jelaskan mengapa memilih model tersebut sebagai model terbaik**.
+Kemudian kita split data nya untuk data test dan data train
+
+```bash
+X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size=0.3, stratify=Y, random_state=2)
+```
+Nah, data di split dengan presentase data test 30% dan data training 70%
+untuk lebih rincinya bisa di ketikan perintah
+```bash
+print(X.shape, X_train.shape, X_test.shape)
+(569, 8) (398, 8) (171, 8)
+```
+nah kita lihat untuk data train sejumlah 398 entri dan data test 171 entri
+
+Kemudian msukan algoritma klasifikasinya
+```bash
+classifier = svm.SVC(kernel='linear')
+```
+dan kita masukan data X dan Y kedalam classifier
+```bash
+classifier.fit(X_train, Y_train)
+```
+selanjutnya kita lakukan pengecekan akurasi pada data train dan data test
+```bash
+x_train_prediction = classifier.predict(X_train)
+training_data_accuracy = accuracy_score(x_train_prediction, Y_train)
+print('Tingkat akurasi data training = ', training_data_accuracy)
+```
+maka akan di peroleh hasil
+```bash
+Tingkat akurasi data training =  0.957286432160804
+```
+Bisa dilihat akurasinya di 95.7%
+
+selanjutnya kita lakukan pada data test
+
+```bash
+x_test_prediction = classifier.predict(X_test)
+test_data_accuracy = accuracy_score(x_test_prediction, Y_test)
+print('Tingkat akurasi data test = ', test_data_accuracy)
+```
+maka akan muncul
+```bash
+Tingkat akurasi data test =  0.9239766081871345
+```
+tingkat akurasi di 92%, masih cukup tinggi.
+Sampai sini model sudah selesai dan bisa di lakukan pengecekan logika apakah algoritma kita berjalan atau tidak
+```bash
+input_data = (17.99, 10.38, 122.8, 1001, 0.1184, 0.2776, 0.890, 0.999)
+
+input_array = np.array(input_data)
+
+data_reshape = input_array.reshape(1,-1)
+
+std_data = scaler.transform(data_reshape)
+print(std_data)
+
+prediction = classifier.predict(std_data)
+print(prediction)
+
+if (prediction[0] == 0):
+    print('Jinak')
+else :
+    print('Ganas')
+```
+maka akan muncul
+![alt text](https://github.com/Ikmalsr/uts-cancer/blob/main/result.png)
+Sudah di dapatkan hasil dan untuk hasilnya kita kembalikan nilainya menjadi string.
+
+Selanjutnya kita import file .sav nya untuk kita push ke dalam file yang akan di tampilkan ke streamlitnya
+```bash
+import pickle
+filename = 'jenis_cancer.sav'
+pickle.dump(classifier,open(filename,'wb'))
+```
+Sampai sini proses sudah selesai
+
 
 ## Evaluation
-Pada bagian ini anda perlu menyebutkan metrik evaluasi yang digunakan. Lalu anda perlu menjelaskan hasil proyek berdasarkan metrik evaluasi yang digunakan.
+Proses evaluasi dilakukan dengan pengecekan akurasi. Dan Proses ini sudah cukup untuk melakukan pengecekan pada algoritma klasifikasi dengan perintah dan output berupa :
+```bash
+x_train_prediction = classifier.predict(X_train)
+training_data_accuracy = accuracy_score(x_train_prediction, Y_train)
+print('Tingkat akurasi data training = ', training_data_accuracy)
+Tingkat akurasi data training =  0.957286432160804
+```
 
-Sebagai contoh, Anda memiih kasus klasifikasi dan menggunakan metrik **akurasi, precision, recall, dan F1 score**. Jelaskan mengenai beberapa hal berikut:
-- Penjelasan mengenai metrik yang digunakan
-- Menjelaskan hasil proyek berdasarkan metrik evaluasi
+- Proses pengecekan akurasi bisa di ambil ketika data train dan data test nya sudah memiliki akurasi yang cukup tinggi
+- Jika ingin melakukan evaluasi dengan algoritma lain, maka harus di tambahkan algoritma permodelanya
 
-Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
-
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan formula metrik dan bagaimana metrik tersebut bekerja.
 
 ## Deployment
-pada bagian ini anda memberikan link project yang diupload melalui streamlit share. boleh ditambahkan screen shoot halaman webnya.
-
-**---Ini adalah bagian akhir laporan---**
-
-_Catatan:_
-- _Anda dapat menambahkan gambar, kode, atau tabel ke dalam laporan jika diperlukan. Temukan caranya pada contoh dokumen markdown di situs editor [Dillinger](https://dillinger.io/), [Github Guides: Mastering markdown](https://guides.github.com/features/mastering-markdown/), atau sumber lain di internet. Semangat!_
-- Jika terdapat penjelasan yang harus menyertakan code snippet, tuliskan dengan sewajarnya. Tidak perlu menuliskan keseluruhan kode project, cukup bagian yang ingin dijelaskan saja.
+Aplikasi saya
+[Klasifikasi Cancer](https://ikmaluts.streamlit.app/)
+![alt text](https://github.com/Ikmalsr/uts-cancer/blob/main/ui.png)
 
