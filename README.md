@@ -148,7 +148,23 @@ Maka akan muncul
 seperti yang dilihat, heatmap berdasarkan data daignosis bernilai 1 dengan parameter yang sudah di koreksi
 
 ## Modeling
-Tahapan ini membahas mengenai model machine learning yang digunakan untuk menyelesaikan permasalahan. Anda perlu menjelaskan tahapan dan parameter yang digunakan pada proses pemodelan.
+Selanjutnya jika data preparation sudah selesai maka kita bisa lakukan proses modeling.
+Pertama tama yang harus di siapkan adalah nilai X dan Y, diman X menjadi atrribut dan Y menjadi label
+```bash
+features = ['radius_mean','perimeter_mean','area_mean','smoothness_mean','compactness_mean','concavity_mean','fractal_dimension_mean', 'texture_mean']
+X = df[features]
+Y = df['diagnosis']
+```
+Bisa dilihat dimana saya menerapkan 8 attribut pada nilai X dan 1 label pada Y
+
+Selanjutnya kita lakukan scaler karena menggunakan algoritma SVC
+```bash
+scaler = StandardScaler()
+```
+Kemudian kita bisa standarkan nilai X
+```bash
+scaler.fit(X)
+```
 
 **Rubrik/Kriteria Tambahan (Opsional)**: 
 - Menjelaskan kelebihan dan kekurangan dari setiap algoritma yang digunakan.
