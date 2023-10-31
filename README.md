@@ -44,7 +44,7 @@ Variable dan tipedata yang di gunakan meliputi :
 - BMI = tingkat BMI (float64)
 - DiabetesPedigreeFunction = nilai DPF (float64)
 - Age = usia pasien (int64) 
-
+- Outcome = diagnosa apakah mengalami diabetes atau tidak (int64)
 ## Data Preparation
 Pertama tama kita persiapkan dataset yang akan di pergunakan untuk menjadi model Machine Learning, selanjutnya kita lakukan data preparation dengan memanggil library yang dibutuhkan
 
