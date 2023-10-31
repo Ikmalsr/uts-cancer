@@ -3,7 +3,7 @@ import streamlit as st
 
 diagnosa = pickle.load(open('diabetes.sav', 'rb'))
 
-st.title('Diagnosa Resiko Anda Terkena Diabetes')
+st.title('Diagnosa Resiko Anda Terkena Diabetes Berdasarkan Usia Kehamilan')
 
 Pregnancies = st.number_input('Masa Kehamilan anda (bulan)')
 Glucose = st.number_input('Tingkat Gulkosa Dalam Tubuh')
